@@ -1,0 +1,1058 @@
+/* ==========================================================================
+   PARA ANDREA - NOCHE ESTRELLADA (VELVET MIDNIGHT)
+   Diseño de Alta Costura Romántica | HTML5 + Modern CSS3 + Vanilla JS
+   ========================================================================== */
+
+:root {
+  /* Paleta Celestial & Velvet */
+  --bg-deep: #060814;
+  --bg-midnight: #0d122b;
+  --bg-nebula: #171638;
+  
+  --card-surface: rgba(14, 20, 46, 0.85);
+  --card-border: rgba(246, 196, 69, 0.22);
+  --card-border-hover: rgba(246, 196, 69, 0.45);
+  
+  --gold-star: #f6c445;
+  --gold-light: #ffdf85;
+  --gold-shadow: rgba(246, 196, 69, 0.25);
+  
+  --rose-blush: #ff6b8b;
+  --rose-glow: rgba(255, 107, 139, 0.3);
+  --wine-wax: #8b1e2f;
+  --wine-wax-border: #64121f;
+  
+  --text-pure: #ffffff;
+  --text-main: #e2e8f5;
+  --text-muted: #9fb0d8;
+  --text-gold: #f5cf6d;
+  
+  /* Pergamino de la carta */
+  --paper-bg: #faf7f0;
+  --paper-ink: #1f1d2b;
+  --paper-border: #dfcc9f;
+  
+  /* Tipografías */
+  --font-display: 'Italiana', Georgia, serif;
+  --font-body: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Transiciones & Sombras */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-soft: 0 12px 35px -8px rgba(0, 0, 0, 0.5), 0 4px 14px -3px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 25px 60px -12px rgba(3, 6, 20, 0.8), 0 0 40px 2px rgba(246, 196, 69, 0.12);
+}
+
+/* --------------------------------------------------------------------------
+   RESET & BASES DEL SISTEMA
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Selección y Scrollbar Tematizados */
+::selection {
+  background-color: var(--gold-star);
+  color: var(--bg-deep);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(246, 196, 69, 0.25);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-star);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold-star);
+  outline-offset: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   CANVAS DE FONDO Y CONFETI
+   -------------------------------------------------------------------------- */
+#starfield-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 100;
+  pointer-events: none;
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   BARRA AMBIENTAL & CONTROL MUSICAL
+   -------------------------------------------------------------------------- */
+.ambient-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-bottom: 0.75rem;
+  padding-left: max(1.25rem, env(safe-area-inset-left));
+  padding-right: max(1.25rem, env(safe-area-inset-right));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.brand-monogram {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--gold-star);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 12px var(--gold-shadow);
+  pointer-events: auto;
+}
+
+.monogram-sparkle {
+  font-size: 0.85rem;
+  animation: pulseSparkle 3s ease-in-out infinite;
+}
+
+.music-pill {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  min-height: 44px; /* Tamaño mínimo táctil recomendado por Apple/Google */
+  border-radius: 9999px;
+  background: rgba(14, 20, 46, 0.8);
+  border: 1px solid rgba(246, 196, 69, 0.25);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  user-select: none;
+}
+
+.music-pill:active {
+  transform: scale(0.96);
+}
+
+.music-pill .icon-sound-on {
+  display: none;
+}
+.music-pill .icon-sound-off {
+  display: block;
+  color: var(--text-muted);
+}
+
+.music-pill.playing {
+  border-color: var(--gold-star);
+  box-shadow: 0 4px 18px var(--gold-shadow);
+}
+
+.music-pill.playing .icon-sound-on {
+  display: block;
+  color: var(--gold-star);
+}
+.music-pill.playing .icon-sound-off {
+  display: none;
+}
+.music-pill.playing .music-label {
+  color: var(--gold-light);
+}
+
+.music-pill.muted {
+  opacity: 0.88;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.music-pill.muted .music-wave span {
+  animation: none !important;
+  transform: scaleY(0.25) !important;
+  opacity: 0.35;
+}
+
+.music-pill:hover {
+  border-color: var(--gold-star);
+  color: var(--gold-light);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px var(--gold-shadow);
+}
+
+.music-wave {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.music-wave span {
+  display: block;
+  width: 2px;
+  height: 12px;
+  background-color: var(--gold-star);
+  border-radius: 1px;
+  transform-origin: bottom;
+  transform: scaleY(0.25);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.music-pill.playing .music-wave span:nth-child(1) {
+  animation: soundWave 0.8s ease-in-out infinite alternate;
+}
+.music-pill.playing .music-wave span:nth-child(2) {
+  animation: soundWave 0.9s ease-in-out 0.2s infinite alternate;
+}
+.music-pill.playing .music-wave span:nth-child(3) {
+  animation: soundWave 0.7s ease-in-out 0.4s infinite alternate;
+}
+
+@keyframes soundWave {
+  0% { transform: scaleY(0.25); }
+  100% { transform: scaleY(1); }
+}
+
+@keyframes pulseSparkle {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* --------------------------------------------------------------------------
+   ESCENARIO PRINCIPAL & CAPAS DE CONTENIDO
+   -------------------------------------------------------------------------- */
+.experience-stage {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: calc(5rem + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
+  padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+  z-index: 10;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chapter-card {
+  position: absolute;
+  max-width: 580px;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(24px) scale(0.97);
+  transition: opacity 0.7s var(--ease-spring),
+              transform 0.7s var(--ease-spring),
+              visibility 0.7s;
+  pointer-events: none;
+}
+
+.chapter-card.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.card-inner {
+  position: relative;
+  background: var(--card-surface);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 2.75rem 2.25rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-elevated);
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.card-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle at 50% 30%, rgba(246, 196, 69, 0.14), transparent 70%);
+  filter: blur(30px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   ELEMENTOS NARRATIVOS Y TIPOGRAFÍA
+   -------------------------------------------------------------------------- */
+.celestial-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  background: rgba(246, 196, 69, 0.08);
+  border: 1px solid rgba(246, 196, 69, 0.25);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-gold);
+}
+
+.chapter-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--gold-light);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.chapter-number {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.chapter-rule {
+  width: 24px;
+  height: 1px;
+  background: var(--gold-star);
+  opacity: 0.4;
+}
+
+.chapter-tag {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.chapter-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--text-pure);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.hero-name {
+  font-size: 3.4rem;
+  color: var(--text-pure);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 20px rgba(246, 196, 69, 0.25);
+}
+
+.chapter-quote {
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--text-main);
+  max-width: 440px;
+  line-height: 1.7;
+}
+
+.chapter-instruction {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  max-width: 400px;
+}
+
+.chapter-narrative {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-main);
+  line-height: 1.75;
+  max-width: 480px;
+}
+
+/* --------------------------------------------------------------------------
+   POLAROIDS DE RECUERDOS (INTERACTIVAS)
+   -------------------------------------------------------------------------- */
+.polaroid-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.polaroid-card {
+  position: relative;
+  background: #fbfbf9;
+  padding: 12px 12px 24px;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.25);
+  max-width: 320px;
+  width: 100%;
+  transform: rotate(-1.5deg);
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s ease;
+  cursor: pointer;
+}
+
+#polaroid-2 {
+  transform: rotate(1.8deg);
+}
+
+#polaroid-3 {
+  transform: rotate(-1.2deg);
+}
+
+.polaroid-card:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(246, 196, 69, 0.2);
+}
+
+.polaroid-pin {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold-star);
+  font-size: 1.1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.polaroid-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3.5;
+  overflow: hidden;
+  background: #111;
+  border-radius: 2px;
+}
+
+.polaroid-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-spring);
+  display: block;
+}
+
+.polaroid-card:hover .polaroid-photo img {
+  transform: scale(1.05);
+}
+
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.polaroid-caption {
+  font-family: var(--font-display);
+  color: #2b2b2b;
+  font-size: 0.95rem;
+  margin-top: 10px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* --------------------------------------------------------------------------
+   BOTONES Y ACCIONES
+   -------------------------------------------------------------------------- */
+.card-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.85rem 2rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(246, 196, 69, 0.95), rgba(220, 165, 30, 0.95));
+  color: #060814;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(246, 196, 69, 0.3);
+  transition: all 0.3s var(--ease-spring);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(246, 196, 69, 0.45);
+  background: linear-gradient(135deg, #ffd97d, #f6c445);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-sparkle {
+  font-size: 1.1rem;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.btn-primary:hover .btn-sparkle {
+  transform: translateX(4px);
+}
+
+/* --------------------------------------------------------------------------
+   CAPÍTULO 4: LA PREGUNTA & ZONA DE DECISIÓN
+   -------------------------------------------------------------------------- */
+.question-box {
+  padding: 3.5rem 2rem;
+  position: relative;
+}
+
+.question-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 139, 0.2), rgba(246, 196, 69, 0.15), transparent 70%);
+}
+
+.celestial-halo {
+  color: var(--gold-star);
+  animation: slowSpin 30s linear infinite;
+  margin-bottom: -0.5rem;
+}
+
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.proposal-recipient {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--gold-light);
+  letter-spacing: 0.08em;
+}
+
+.proposal-question {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: var(--text-pure);
+  line-height: 1.2;
+  text-shadow: 0 0 30px rgba(246, 196, 69, 0.3);
+}
+
+.proposal-subtext {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 440px;
+}
+
+/* Burbuja de respuesta juguetona al huir */
+.tease-bubble {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.3s var(--ease-spring);
+}
+
+.tease-bubble.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tease-text {
+  padding: 0.4rem 1.1rem;
+  background: rgba(255, 107, 139, 0.15);
+  border: 1px solid rgba(255, 107, 139, 0.35);
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ff9cb0;
+}
+
+/* Zona de botones Sí / No */
+.proposal-decision-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  min-height: 80px;
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.btn-decision {
+  border: none;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 1rem 2.4rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-spring);
+  user-select: none;
+}
+
+/* Botón SÍ: Radiante y Magnético */
+.btn-yes {
+  position: relative;
+  background: linear-gradient(135deg, #ff4d6d, #f6c445);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4), 0 0 20px rgba(246, 196, 69, 0.3);
+  transform-origin: center;
+  z-index: 10;
+  animation: pulseYes 2.5s infinite;
+}
+
+.btn-yes:hover {
+  transform: scale(1.06);
+  box-shadow: 0 14px 40px rgba(255, 77, 109, 0.6), 0 0 30px rgba(246, 196, 69, 0.5);
+}
+
+@keyframes pulseYes {
+  0%, 100% { box-shadow: 0 10px 30px rgba(255, 77, 109, 0.35), 0 0 20px rgba(246, 196, 69, 0.2); }
+  50% { box-shadow: 0 12px 35px rgba(255, 77, 109, 0.5), 0 0 30px rgba(246, 196, 69, 0.4); }
+}
+
+/* Botón NO: Elusive / Escurridizo */
+.btn-no {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-muted);
+  z-index: 5;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-no.moving {
+  position: fixed !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), top 0.25s cubic-bezier(0.16, 1, 0.3, 1), left 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   CAPÍTULO 5: CELEBRACIÓN Y SOBRE DE LACRE
+   -------------------------------------------------------------------------- */
+.victory-content {
+  max-width: 620px;
+  padding: 3rem 2rem;
+  background: rgba(12, 17, 40, 0.92);
+}
+
+.victory-glow {
+  background: radial-gradient(circle at 50% 40%, rgba(246, 196, 69, 0.25), rgba(255, 107, 139, 0.2), transparent 75%);
+}
+
+.victory-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.victory-sparkles {
+  font-size: 1.8rem;
+  animation: shimmerSparkles 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite alternate;
+}
+
+@keyframes shimmerSparkles {
+  from { transform: translateY(0) scale(0.96); opacity: 0.85; }
+  to { transform: translateY(-4px) scale(1.04); opacity: 1; }
+}
+
+.victory-title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--gold-light);
+  line-height: 1.1;
+  text-shadow: 0 0 25px rgba(246, 196, 69, 0.35);
+}
+
+.victory-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-main);
+  max-width: 440px;
+}
+
+/* --------------------------------------------------------------------------
+   SOBRE VIRTUAL Y SELLO DE LACRE INTERACTIVO
+   -------------------------------------------------------------------------- */
+.wax-envelope-wrapper {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.envelope-outer {
+  position: relative;
+  width: 100%;
+  background: #191f42;
+  border: 1px solid rgba(246, 196, 69, 0.3);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.5s var(--ease-spring);
+}
+
+.envelope-outer.opened {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Botón Sello de Lacre */
+.wax-seal-btn {
+  width: 100%;
+  padding: 2.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  background: linear-gradient(180deg, rgba(23, 30, 68, 0.9), rgba(16, 21, 50, 0.95));
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wax-seal-btn:hover .wax-seal-ornament {
+  transform: scale(1.08);
+  box-shadow: 0 0 35px rgba(246, 196, 69, 0.5);
+}
+
+.wax-seal-ornament {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ad293e, #801423 70%, #520a14);
+  border: 3px solid #df9954;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s ease;
+}
+
+.wax-monogram {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: #ffd97d;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+.wax-hint {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-gold);
+}
+
+/* Carta desplegable interior */
+.letter-paper {
+  display: none;
+  background: var(--paper-bg);
+  color: var(--paper-ink);
+  border: 1px solid var(--paper-border);
+  border-radius: 16px;
+  padding: 2.25rem 2rem;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+  text-align: left;
+  animation: unfoldLetter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.envelope-outer.opened .wax-seal-btn {
+  display: none;
+}
+
+.envelope-outer.opened .letter-paper {
+  display: block;
+}
+
+@keyframes unfoldLetter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.letter-filigree {
+  text-align: center;
+  color: var(--wine-wax);
+  font-size: 0.9rem;
+  letter-spacing: 0.3em;
+  margin-bottom: 0.5rem;
+}
+
+.letter-heading {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--wine-wax);
+  text-align: center;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.letter-body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #383446;
+  margin-bottom: 1.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   TICKET / TARJETA DE CITA SECRETA
+   -------------------------------------------------------------------------- */
+.invitation-ticket {
+  position: relative;
+  background: #ffffff;
+  border: 1.5px dashed #cbb685;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: inset 0 0 15px rgba(223, 204, 159, 0.2);
+}
+
+.ticket-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--wine-wax);
+  border-bottom: 1px solid rgba(139, 30, 47, 0.3);
+  padding-bottom: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.ticket-detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.ticket-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ticket-label {
+  font-size: 0.8rem;
+  color: #6e677c;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ticket-val {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1a1724;
+}
+
+.ticket-note {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #8c829e;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   BOTÓN WHATSAPP
+   -------------------------------------------------------------------------- */
+.whatsapp-cta-block {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  border-radius: 12px;
+  background: #25d366;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+  transition: all 0.3s var(--ease-spring);
+}
+
+.btn-whatsapp:hover {
+  background: #20bd5a;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(37, 211, 102, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVIDAD Y AJUSTES MOBILE FIRST
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .ambient-bar {
+    padding-top: max(0.85rem, env(safe-area-inset-top));
+    padding-bottom: 0.5rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  
+  .brand-monogram {
+    font-size: 1.35rem;
+  }
+
+  .music-pill {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8rem;
+    gap: 0.4rem;
+    min-height: 42px;
+  }
+  
+  .experience-stage {
+    padding-top: calc(4.25rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+    padding-left: max(0.85rem, env(safe-area-inset-left, 0px));
+    padding-right: max(0.85rem, env(safe-area-inset-right, 0px));
+    align-items: flex-start; /* Permite scroll natural sin cortar el inicio en pantallas pequeñas */
+  }
+  
+  .chapter-card {
+    margin: auto 0;
+  }
+
+  .card-inner {
+    padding: 2rem 1.15rem 2.25rem;
+    gap: 1.15rem;
+    border-radius: 20px;
+  }
+  
+  .hero-name {
+    font-size: clamp(2.3rem, 9vw, 3rem);
+  }
+  
+  .chapter-title {
+    font-size: clamp(1.7rem, 6.5vw, 2.1rem);
+  }
+
+  .chapter-quote {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .chapter-narrative {
+    font-size: 0.98rem;
+    line-height: 1.68;
+  }
+  
+  .proposal-question {
+    font-size: clamp(1.85rem, 7.5vw, 2.4rem);
+  }
+  
+  .victory-title {
+    font-size: clamp(2.2rem, 8vw, 2.7rem);
+  }
+  
+  .polaroid-card {
+    max-width: 260px;
+    padding: 10px 10px 20px;
+  }
+
+  .polaroid-caption {
+    font-size: 0.88rem;
+    margin-top: 8px;
+  }
+  
+  .letter-paper {
+    padding: 1.35rem 1.1rem;
+  }
+
+  .letter-heading {
+    font-size: 1.55rem;
+  }
+
+  .letter-body {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .invitation-ticket {
+    padding: 1.15rem;
+  }
+
+  .ticket-val {
+    font-size: 0.98rem;
+  }
+  
+  .proposal-decision-zone {
+    flex-direction: column;
+    gap: 0.85rem;
+    min-height: 130px;
+  }
+  
+  .btn-decision {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.95rem 1.5rem;
+    font-size: 1.05rem;
+    min-height: 52px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.85rem 1.5rem;
+    min-height: 50px;
+  }
+
+  .btn-whatsapp {
+    min-height: 52px;
+    font-size: 0.92rem;
+  }
+}
