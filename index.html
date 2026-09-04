@@ -42,8 +42,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <span class="monogram-sparkle">✦</span>
     </div>
 
-    <!-- Botón de música con soporte claro de MUTE / SILENCIO -->
-    <button id="music-toggle" class="music-pill muted" aria-label="Música de fondo: Silenciada. Pulsa para reproducir" type="button">
+    <!-- Botón de música con soporte claro de MUTE / SILENCIO (Activo por defecto) -->
+    <button id="music-toggle" class="music-pill playing" aria-label="Música sonando: Machu Picchu. Pulsa para silenciar (Mute)" type="button">
       <span class="music-icon" id="music-icon" aria-hidden="true">
         <!-- Icono cuando está sonando -->
         <svg class="icon-sound-on" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -58,17 +58,17 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <line x1="17" y1="9" x2="23" y2="15"></line>
         </svg>
       </span>
-      <span class="music-label" id="music-label">Música: Off</span>
+      <span class="music-label" id="music-label">Machu Picchu 🎵</span>
       <span class="music-wave" aria-hidden="true">
         <span></span><span></span><span></span>
       </span>
     </button>
   </header>
 
-  <!-- Elemento de audio: el usuario puede poner su propia canción en assets/cancion.mp3 -->
-  <audio id="bg-audio" preload="auto" loop>
-    <!-- Si tienes un archivo de música, colócalo en la carpeta y descomenta la siguiente línea: -->
-    <!-- <source src="assets/cancion.mp3" type="audio/mp3"> -->
+  <!-- Elemento de audio oficial: Camilo & Evaluna - Machu Picchu (reproducción activa por defecto) -->
+  <audio id="bg-audio" preload="auto" autoplay loop playsinline>
+    <source src="cancion.mp3" type="audio/mpeg">
+    <source src="cancion.mp3" type="audio/mp3">
   </audio>
 
   <!-- Contenedor principal de la experiencia -->
@@ -119,18 +119,33 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
         <h2 class="chapter-title">La casualidad más linda</h2>
 
-        <div class="polaroid-wrapper">
+        <div class="gallery-hint" aria-hidden="true">
+          <span>← Desliza para ver nuestras fotos ✨ →</span>
+        </div>
+
+        <div class="polaroid-gallery" role="region" aria-label="Galería de fotos del capítulo 1">
           <div class="polaroid-card" id="polaroid-1" tabindex="0" role="img" aria-label="Fotografía de recuerdo 1">
             <div class="polaroid-pin" aria-hidden="true">✦</div>
             <div class="polaroid-photo">
-              <!-- NOTA PARA EDITAR: Puedes cambiar src por el enlace a tu foto real -->
-              <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop" 
-                   alt="Recuerdo juntos" 
+              <img src="images/foto-1.jpeg" 
+                   alt="Donde todo empezó" 
                    id="photo-1"
                    loading="lazy">
               <div class="photo-overlay"></div>
             </div>
-            <p class="polaroid-caption">Donde todo empezó a tener sentido</p>
+            <p class="polaroid-caption">Donde empezó nuestra historia ✨</p>
+          </div>
+
+          <div class="polaroid-card" id="polaroid-2" tabindex="0" role="img" aria-label="Fotografía de recuerdo 2">
+            <div class="polaroid-pin" aria-hidden="true">✦</div>
+            <div class="polaroid-photo">
+              <img src="images/foto-2.jpeg" 
+                   alt="Risas juntos" 
+                   id="photo-2"
+                   loading="lazy">
+              <div class="photo-overlay"></div>
+            </div>
+            <p class="polaroid-caption">Y las risas nunca faltaron</p>
           </div>
         </div>
 
@@ -161,18 +176,45 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
         <h2 class="chapter-title">Lo que haces en mí</h2>
 
-        <div class="polaroid-wrapper">
-          <div class="polaroid-card" id="polaroid-2" tabindex="0" role="img" aria-label="Fotografía de recuerdo 2">
+        <div class="gallery-hint" aria-hidden="true">
+          <span>← Desliza para ver más recuerdos ✨ →</span>
+        </div>
+
+        <div class="polaroid-gallery" role="region" aria-label="Galería de fotos del capítulo 2">
+          <div class="polaroid-card" id="polaroid-3" tabindex="0" role="img" aria-label="Fotografía de recuerdo 3">
             <div class="polaroid-pin" aria-hidden="true">✦</div>
             <div class="polaroid-photo">
-              <!-- NOTA PARA EDITAR: Puedes cambiar src por el enlace a tu foto real -->
-              <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop" 
+              <img src="images/foto-3.jpeg" 
                    alt="Tu luz y sonrisa" 
-                   id="photo-2"
+                   id="photo-3"
                    loading="lazy">
               <div class="photo-overlay"></div>
             </div>
-            <p class="polaroid-caption">Esa sonrisa que calma cualquier tormenta</p>
+            <p class="polaroid-caption">Esa mirada tuya que desarma</p>
+          </div>
+
+          <div class="polaroid-card" id="polaroid-4" tabindex="0" role="img" aria-label="Fotografía de recuerdo 4">
+            <div class="polaroid-pin" aria-hidden="true">✦</div>
+            <div class="polaroid-photo">
+              <img src="images/foto-4.jpeg" 
+                   alt="Momentos compartidos" 
+                   id="photo-4"
+                   loading="lazy">
+              <div class="photo-overlay"></div>
+            </div>
+            <p class="polaroid-caption">Cómplices en cada instante</p>
+          </div>
+
+          <div class="polaroid-card" id="polaroid-5" tabindex="0" role="img" aria-label="Fotografía de recuerdo 5">
+            <div class="polaroid-pin" aria-hidden="true">✦</div>
+            <div class="polaroid-photo">
+              <img src="images/foto-5.jpeg" 
+                   alt="Tu magia" 
+                   id="photo-5"
+                   loading="lazy">
+              <div class="photo-overlay"></div>
+            </div>
+            <p class="polaroid-caption">Tu forma única de ser ✨</p>
           </div>
         </div>
 
@@ -203,18 +245,45 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
         <h2 class="chapter-title">A tu lado</h2>
 
-        <div class="polaroid-wrapper">
-          <div class="polaroid-card" id="polaroid-3" tabindex="0" role="img" aria-label="Fotografía de recuerdo 3">
+        <div class="gallery-hint" aria-hidden="true">
+          <span>← Desliza para ver más recuerdos ✨ →</span>
+        </div>
+
+        <div class="polaroid-gallery" role="region" aria-label="Galería de fotos del capítulo 3">
+          <div class="polaroid-card" id="polaroid-6" tabindex="0" role="img" aria-label="Fotografía de recuerdo 6">
             <div class="polaroid-pin" aria-hidden="true">✦</div>
             <div class="polaroid-photo">
-              <!-- NOTA PARA EDITAR: Puedes cambiar src por el enlace a tu foto real -->
-              <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=800&auto=format&fit=crop" 
+              <img src="images/foto-6.jpeg" 
                    alt="Momentos compartidos" 
-                   id="photo-3"
+                   id="photo-6"
                    loading="lazy">
               <div class="photo-overlay"></div>
             </div>
-            <p class="polaroid-caption">Cada minuto contigo pasa volando</p>
+            <p class="polaroid-caption">Haces especial cualquier lugar</p>
+          </div>
+
+          <div class="polaroid-card" id="polaroid-7" tabindex="0" role="img" aria-label="Fotografía de recuerdo 7">
+            <div class="polaroid-pin" aria-hidden="true">✦</div>
+            <div class="polaroid-photo">
+              <img src="images/foto-7.jpeg" 
+                   alt="Juntos en cada momento" 
+                   id="photo-7"
+                   loading="lazy">
+              <div class="photo-overlay"></div>
+            </div>
+            <p class="polaroid-caption">El tiempo vuela cuando estamos juntos</p>
+          </div>
+
+          <div class="polaroid-card" id="polaroid-8" tabindex="0" role="img" aria-label="Fotografía de recuerdo 8">
+            <div class="polaroid-pin" aria-hidden="true">✦</div>
+            <div class="polaroid-photo">
+              <img src="images/foto-8.jpeg" 
+                   alt="Siempre juntos" 
+                   id="photo-8"
+                   loading="lazy">
+              <div class="photo-overlay"></div>
+            </div>
+            <p class="polaroid-caption">Y cada día te elijo a ti ❤️</p>
           </div>
         </div>
 
@@ -253,9 +322,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           No tengo dudas de que quiero escribir esta y muchas historias más a tu lado.
         </p>
 
-        <!-- Mensaje divertido que reacciona cuando intenta presionar "No" -->
+        <!-- Diálogo interactivo divertido que reacciona a cada intento de 'No' -->
         <div class="tease-bubble" id="tease-bubble" aria-live="polite">
-          <span class="tease-text" id="tease-text">Piénsalo bien... 👀</span>
+          <div class="tease-badge" id="tease-badge" aria-hidden="true">👀</div>
+          <div class="tease-text-wrap">
+            <span class="tease-title" id="tease-title">¿Segura? Piénsalo dos veces... 🤔</span>
+            <span class="tease-desc" id="tease-desc">Mira que esta oferta es de edición limitada y expira hoy 😂</span>
+          </div>
         </div>
 
         <!-- Área de respuesta con botón Sí y botón No escurridizo -->
@@ -263,6 +336,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <button type="button" class="btn-decision btn-yes" id="btn-yes">
             <span class="btn-yes-glow" aria-hidden="true"></span>
             <span class="btn-decision-text">¡Sí, acepto! ❤️</span>
+            <span class="btn-decision-hint" id="yes-hint">La mejor opción ✨</span>
           </button>
 
           <button type="button" class="btn-decision btn-no" id="btn-no">
@@ -283,6 +357,22 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="victory-sparkles" aria-hidden="true">✨ 💖 ✨</div>
           <h2 class="victory-title">¡Dijo que sí!</h2>
           <p class="victory-subtitle">Acabas de hacer a la persona más afortunada del mundo entero.</p>
+        </div>
+
+        <!-- Marco estelar de honor para la foto favorita (mejor.jpeg) -->
+        <div class="favorite-photo-showcase" id="favorite-showcase">
+          <div class="favorite-frame-wrapper">
+            <div class="favorite-badge-tag">
+              <span class="badge-star">✦</span>
+              <span>Nuestra Foto Favorita</span>
+              <span class="badge-star">✦</span>
+            </div>
+            <div class="favorite-photo-border">
+              <img src="images/mejor.jpeg" alt="Andrea y yo, nuestra mejor foto juntos" id="photo-best" loading="eager">
+              <div class="photo-glow-border" aria-hidden="true"></div>
+            </div>
+            <p class="favorite-photo-caption">«Para el mejor nuevo comienzo de nuestras vidas» ❤️✨</p>
+          </div>
         </div>
 
         <!-- Sobre con sello de lacre interactivo -->

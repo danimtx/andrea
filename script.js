@@ -13,7 +13,6 @@ const PROPOSAL_CONFIG = {
   recipientName: "Andrea",
 
   // Tu número de WhatsApp para recibir su confirmación (incluye código de país sin '+')
-  // Ejemplo para México: "5215512345678" | Colombia: "573001234567" | España: "34612345678"
   whatsappPhone: "5210000000000", // <-- CAMBIA ESTE NÚMERO POR EL TUYO
 
   // Mensaje que se escribirá solo en su WhatsApp cuando pulse el botón
@@ -24,16 +23,99 @@ const PROPOSAL_CONFIG = {
   dateTime: "Este fin de semana a las 8:00 PM",
   dressCode: "Esa sonrisa tuya que me enamora",
 
-  // Mensajes juguetones que salen cuando intenta tocar el botón "No"
-  teaseMessages: [
-    "¿Segura? Piénsalo dos veces... 🤔",
-    "¡Ups! Ese botón tiene cosquillas 😜",
-    "El destino dice que esa no es la opción ✨",
-    "¡Ey! El botón de al lado brilla más 👇",
-    "No se aceptan devoluciones de amor ❤️",
-    "¿Segura segura segura? 🥺",
-    "¡Prometo hacerte muy feliz si dices que sí! 💫",
-    "Ya ríndete... dale al Sí 🥰"
+  // Diálogos y preguntas divertidas que se alternan en cada intento de presionar "No"
+  teaseDialogues: [
+    {
+      badge: "👀",
+      title: "¿Segura? Piénsalo dos veces...",
+      desc: "Mira que esta oferta es de edición limitada y expira hoy 😂",
+      noText: "¿En serio? 🤨",
+      yesHint: "¡Aquí sí! 💖"
+    },
+    {
+      badge: "🍕",
+      title: "¿Y si te prometo consentirte siempre?",
+      desc: "Comida rica, tus postres favoritos y escucharte siempre ❤️",
+      noText: "¡Casi me das! 😜",
+      yesHint: "¡La mejor opción! ✨"
+    },
+    {
+      badge: "🏃💨",
+      title: "¡Oye! ¡Ese botón no se deja atrapar!",
+      desc: "Tiene patitas y no quiere que le des al No 😂",
+      noText: "¡Por acá! ⚡",
+      yesHint: "¡Te prometo risas! 🌹"
+    },
+    {
+      badge: "🌌",
+      title: "¿Vas a llevarle la contraria al destino?",
+      desc: "El universo ya votó y dijo que hacemos la mejor pareja ✨",
+      noText: "Frío, frío... ❄️",
+      yesHint: "¡Di que sí! 💫"
+    },
+    {
+      badge: "🐱",
+      title: "¿Sabías que cada vez que presionas 'No'...",
+      desc: "Un gatito en alguna parte del mundo se queda sin croquetas 🥺💔",
+      noText: "Intenta otra vez 😏",
+      yesHint: "Salva al gatito 🐾"
+    },
+    {
+      badge: "💅",
+      title: "¡Pero mira el botón de al lado!",
+      desc: "Es rosita, brilla, huele rico y tiene un futuro prometedor 👇",
+      noText: "¡Soy veloz! 🏎️",
+      yesHint: "¡Vamos por helado! 🍦"
+    },
+    {
+      badge: "🥺",
+      title: "¿Quién más te va a querer tanto como yo?",
+      desc: "Nadie más tiene tanta paciencia ni te mira con estos ojitos 🥰",
+      noText: "No se vale 🙈",
+      yesHint: "¡Acepto con amor! ❤️"
+    },
+    {
+      badge: "🤖",
+      title: "¡Alerta del sistema!",
+      desc: "La opción 'No' no es compatible con una mujer tan hermosa como Andrea ⚠️💖",
+      noText: "¡Por aquí no! 🏃",
+      yesHint: "100% compatible 🚀"
+    },
+    {
+      badge: "🏃‍♀️",
+      title: "¡Estás haciendo más cardio que en el gym!",
+      desc: "Persiguiendo el botón por toda la pantalla... ¡ya dale al Sí! 😂",
+      noText: "El otro botón 👇",
+      yesHint: "¡Ya no corras! 💖"
+    },
+    {
+      badge: "✈️",
+      title: "¿Y todos los lugares que visitaremos?",
+      desc: "No me digas que vas a cancelar nuestros viajes juntos 🌎✨",
+      noText: "¡Ya ríndete! 😋",
+      yesHint: "Próxima parada: Juntos ✈️"
+    },
+    {
+      badge: "🌹",
+      title: "Te prometo que nunca te faltarán sonrisas",
+      desc: "Ni abrazos cuando tengas un mal día, ni besos inesperados ❤️",
+      noText: "Último intento 🚀",
+      yesHint: "Promesa de amor 💍"
+    },
+    {
+      badge: "💤",
+      title: "El botón 'No' acaba de renunciar",
+      desc: "Dijo que tú y yo estamos destinados a estar juntos y se fue a descansar 😂",
+      noText: "Dí que síiii 🥺",
+      yesHint: "¡La respuesta final! 💖"
+    },
+    {
+      badge: "💍",
+      title: "¡Ya casi te rindes, lo sé!",
+      desc: "Tu dedo quiere ir directo al botón del 'Sí', no lo reprimas 😜",
+      noText: "¡Imposible! ❤️",
+      yesHint: "¡El Gran Sí! ✨"
+    }
   ]
 };
 
@@ -42,7 +124,7 @@ const PROPOSAL_CONFIG = {
 // ============================================================================
 let currentChapter = 0;
 let noClickAttempts = 0;
-let isMusicPlaying = false;
+let isMusicPlaying = true; // Encendida por defecto
 let audioContext = null;
 let synthInterval = null;
 
@@ -58,7 +140,31 @@ document.addEventListener("DOMContentLoaded", () => {
   initWaxEnvelope();
   initWhatsAppButton();
   initStardustTrail();
+
+  // Activar música por defecto
+  startBackgroundAudio();
+  setupAutoplayUnlock();
 });
+
+// Desbloqueo universal de audio para navegadores móviles (iOS/Android)
+function setupAutoplayUnlock() {
+  const unlockEvents = ["click", "touchstart", "touchend", "pointerdown", "keydown"];
+  const handleFirstInteraction = () => {
+    if (isMusicPlaying) {
+      const bgAudio = document.getElementById("bg-audio");
+      if (bgAudio && bgAudio.paused) {
+        startBackgroundAudio();
+      }
+    }
+    unlockEvents.forEach((evt) => {
+      window.removeEventListener(evt, handleFirstInteraction, { capture: true });
+    });
+  };
+
+  unlockEvents.forEach((evt) => {
+    window.addEventListener(evt, handleFirstInteraction, { capture: true, passive: true });
+  });
+}
 
 // ============================================================================
 // NAVEGACIÓN ENTRE CAPÍTULOS
@@ -68,7 +174,9 @@ function initChapters() {
   if (btnStart) {
     btnStart.addEventListener("click", () => {
       // Iniciar música si no está sonando con el primer gesto del usuario
-      startBackgroundAudio();
+      if (isMusicPlaying) {
+        startBackgroundAudio();
+      }
       goToChapter(1);
     });
   }
@@ -125,19 +233,22 @@ function startBackgroundAudio() {
   if (musicToggle) {
     musicToggle.classList.remove("muted");
     musicToggle.classList.add("playing");
-    musicToggle.setAttribute("aria-label", "Música sonando. Pulsa para silenciar (Mute)");
+    musicToggle.setAttribute("aria-label", "Música sonando: Machu Picchu. Pulsa para silenciar (Mute)");
   }
-  if (musicLabel) musicLabel.textContent = "Sonando";
+  if (musicLabel) musicLabel.textContent = "Machu Picchu 🎵";
 
-  // Si el usuario añadió un archivo mp3 en audio/source
-  if (bgAudio && bgAudio.querySelector("source")) {
+  if (bgAudio) {
     bgAudio.muted = false;
-    bgAudio.play().catch(() => {
-      // Si el navegador restringe o no hay mp3, usamos el sintetizador etéreo
-      startCelestialSynth();
-    });
+    bgAudio.volume = 0.85;
+    const playPromise = bgAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        // En móviles que requieren interacción previa del usuario,
+        // la música se reanudará automáticamente al primer toque de pantalla
+        console.warn("Autoplay diferido a interacción:", err);
+      });
+    }
   } else {
-    // Sintetizador de arpegios de ensueño con Web Audio API puro
     startCelestialSynth();
   }
 }
@@ -153,18 +264,18 @@ function pauseBackgroundAudio() {
     musicToggle.classList.add("muted");
     musicToggle.setAttribute("aria-label", "Música silenciada. Pulsa para activar sonido");
   }
-  if (musicLabel) musicLabel.textContent = "Silencio";
+  if (musicLabel) musicLabel.textContent = "Silenciado";
 
   if (bgAudio) {
-    bgAudio.muted = true;
     bgAudio.pause();
+    bgAudio.muted = true;
   }
   stopCelestialSynth();
 }
 
 /**
  * Generador de acordes celestiales suaves (Estilo caja musical / arpa cósmica)
- * Garantiza música hermosa incluso sin descargar archivos de audio externos.
+ * Garantiza música hermosa incluso si el navegador bloquea audio multimedia externo.
  */
 function startCelestialSynth() {
   if (synthInterval) return;
@@ -179,18 +290,7 @@ function startCelestialSynth() {
       audioContext.resume();
     }
 
-    // Escala pentatónica celestial en frecuencias Hz
-    const notes = [
-      261.63, // C4
-      293.66, // D4
-      329.63, // E4
-      392.00, // G4
-      440.00, // A4
-      523.25, // C5
-      587.33, // D5
-      659.25  // E5
-    ];
-
+    const notes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25];
     let step = 0;
     synthInterval = setInterval(() => {
       if (!isMusicPlaying || !audioContext) return;
@@ -198,7 +298,6 @@ function startCelestialSynth() {
       const note = notes[step % notes.length];
       playChime(note, 2.2);
 
-      // Variación sutil en arpegio
       if (step % 2 === 0) {
         setTimeout(() => {
           if (isMusicPlaying) playChime(notes[(step + 2) % notes.length], 2.5);
@@ -222,7 +321,6 @@ function playChime(freq, duration) {
   osc.type = "sine";
   osc.frequency.setValueAtTime(freq, audioContext.currentTime);
 
-  // Curva de volumen suave estilo gota de rocío / campana
   gain.gain.setValueAtTime(0.001, audioContext.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.08, audioContext.currentTime + 0.08);
   gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
@@ -242,20 +340,18 @@ function stopCelestialSynth() {
 }
 
 // ============================================================================
-// BOTÓN "NO" ESCURRIDIZO & MENSAJES DIVERTIDOS
+// BOTÓN "NO" ESCURRIDIZO CON DIÁLOGO DIVERTIDO Y MÚLTIPLES PREGUNTAS
 // ============================================================================
 function initEvasiveNoButton() {
   const btnNo = document.getElementById("btn-no");
   const btnYes = document.getElementById("btn-yes");
   const teaseBubble = document.getElementById("tease-bubble");
-  const teaseText = document.getElementById("tease-text");
 
   if (!btnNo) return;
 
-  // Manejadores tanto para ratón (hover) como para pantalla táctil en móviles
   const triggerEvade = (e) => {
     e.preventDefault();
-    evadeButton(btnNo, btnYes, teaseBubble, teaseText);
+    evadeButton(btnNo, btnYes, teaseBubble);
   };
 
   btnNo.addEventListener("mouseenter", triggerEvade);
@@ -263,26 +359,41 @@ function initEvasiveNoButton() {
   btnNo.addEventListener("click", triggerEvade);
 }
 
-function evadeButton(btnNo, btnYes, teaseBubble, teaseText) {
+function evadeButton(btnNo, btnYes, teaseBubble) {
   noClickAttempts++;
 
-  // Vibración háptica en celulares si está disponible
+  // Vibración háptica juguetona en móviles
   if (navigator.vibrate) {
     try {
       navigator.vibrate([35, 45, 35]);
     } catch (e) {}
   }
 
-  // 1. Mostrar mensaje pícaro
-  if (teaseBubble && teaseText) {
-    const msgIndex = (noClickAttempts - 1) % PROPOSAL_CONFIG.teaseMessages.length;
-    teaseText.textContent = PROPOSAL_CONFIG.teaseMessages[msgIndex];
+  // 1. Alternar preguntas y diálogos divertidos
+  const dialogues = PROPOSAL_CONFIG.teaseDialogues;
+  const d = dialogues[(noClickAttempts - 1) % dialogues.length];
+
+  const teaseBadge = document.getElementById("tease-badge");
+  const teaseTitle = document.getElementById("tease-title");
+  const teaseDesc = document.getElementById("tease-desc");
+  const btnNoText = document.getElementById("btn-no-text");
+  const yesHint = document.getElementById("yes-hint");
+
+  if (teaseBadge) teaseBadge.textContent = d.badge;
+  if (teaseTitle) teaseTitle.textContent = d.title;
+  if (teaseDesc) teaseDesc.textContent = d.desc;
+  if (btnNoText) btnNoText.textContent = d.noText;
+  if (yesHint) yesHint.textContent = d.yesHint;
+
+  if (teaseBubble) {
+    teaseBubble.classList.remove("visible");
+    void teaseBubble.offsetWidth; // Forzar reflow para reanimar suavemente
     teaseBubble.classList.add("visible");
   }
 
   // 2. Hacer que el botón SÍ crezca y llame más la atención
   if (btnYes) {
-    const scaleFactor = Math.min(1 + (noClickAttempts * 0.05), 1.4);
+    const scaleFactor = Math.min(1 + (noClickAttempts * 0.05), 1.45);
     btnYes.style.transform = `scale(${scaleFactor})`;
   }
 
@@ -303,18 +414,17 @@ function evadeButton(btnNo, btnYes, teaseBubble, teaseText) {
 
   do {
     randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-    randomY = Math.max(padding + 75, Math.floor(Math.random() * maxY)); // Evita chocar con la barra superior de música
+    randomY = Math.max(padding + 75, Math.floor(Math.random() * maxY));
     attempts++;
 
     if (yesRect) {
-      // Verificar distancia mínima respecto al centro del botón Sí
       const noCenterX = randomX + btnWidth / 2;
       const noCenterY = randomY + btnHeight / 2;
       const yesCenterX = yesRect.left + yesRect.width / 2;
       const yesCenterY = yesRect.top + yesRect.height / 2;
       const dist = Math.hypot(noCenterX - yesCenterX, noCenterY - yesCenterY);
 
-      if (dist > 115 || attempts > 15) {
+      if (dist > 120 || attempts > 15) {
         break;
       }
     } else {
@@ -324,6 +434,23 @@ function evadeButton(btnNo, btnYes, teaseBubble, teaseText) {
 
   btnNo.style.left = `${randomX}px`;
   btnNo.style.top = `${randomY}px`;
+
+  // 4. Lanzar reacción flotante divertida
+  spawnFloatingReaction(randomX + btnWidth / 2, randomY, d.badge);
+}
+
+function spawnFloatingReaction(x, y, emoji) {
+  const el = document.createElement("div");
+  el.className = "floating-reaction";
+  el.textContent = emoji;
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  el.style.setProperty("--rx", `${(Math.random() - 0.5) * 60}px`);
+
+  document.body.appendChild(el);
+  setTimeout(() => {
+    if (el.parentNode) el.parentNode.removeChild(el);
+  }, 1100);
 }
 
 // ============================================================================
