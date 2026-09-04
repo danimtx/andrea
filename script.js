@@ -12,16 +12,11 @@ const PROPOSAL_CONFIG = {
   // Nombre de ella
   recipientName: "Andrea",
 
-  // Tu número de WhatsApp para recibir su confirmación (incluye código de país sin '+')
-  whatsappPhone: "5210000000000", // <-- CAMBIA ESTE NÚMERO POR EL TUYO
+  // Tu número de WhatsApp para recibir su confirmación (Bolivia: +591 71168130)
+  whatsappPhone: "59171168130",
 
   // Mensaje que se escribirá solo en su WhatsApp cuando pulse el botón
-  whatsappMessage: "¡Hola! Acabo de ver la página... y mi respuesta es ¡SÍ! ❤️✨ Nos vemos en nuestra primera cita.",
-
-  // Datos de la cita en la carta final
-  datePlace: "Restaurante Secreto (Prepárate para una sorpresa)",
-  dateTime: "Este fin de semana a las 8:00 PM",
-  dressCode: "Esa sonrisa tuya que me enamora",
+  whatsappMessage: "¡Hola mi amor! ❤️ Acabo de ver la página... y mi respuesta es ¡SÍ! 🥰 Te quiero muchísimo. Yo también quiero hacer todo contigo, cocinar, ver pelis, dormir juntos, abrazarte y besarte siempre. ¡Te amo! ✨",
 
   // Diálogos y preguntas divertidas que se alternan en cada intento de presionar "No"
   teaseDialogues: [
